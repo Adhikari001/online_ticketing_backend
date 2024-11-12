@@ -1,6 +1,5 @@
 package com.example.onlineticketing.controller;
 
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -24,13 +23,15 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class PersonController {
-    static final Logger  log = LoggerFactory.getLogger(PersonController.class);
+    static final Logger log = LoggerFactory.getLogger(PersonController.class);
     private final PersonService personService;
 
     @GetMapping(Routes.GET_AUTHENTICATED_PERSON)
     public UserInformation getUserInformation(Principal principal) {
         log.info("Get user information {}", principal.getName());
-        return personService.getAuthenticatedUser(principal);
+        // return principal;
+        // return personService.getAuthenticatedUser(principal);
+        return null;
     }
 
     @GetMapping(Routes.GET_ALL_PERSON)
@@ -58,7 +59,7 @@ public class PersonController {
     }
 
     @PostMapping(Routes.PERSON_LOGOUT)
-    public MessageResponse logout(){
+    public MessageResponse logout() {
         log.info("Logout request");
         return new MessageResponse("Logged out successfully.");
     }

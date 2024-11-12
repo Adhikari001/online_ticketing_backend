@@ -11,9 +11,9 @@ import com.example.onlineticketing.dto.person.UserInformation;
 import com.example.onlineticketing.entity.person.Person;
 
 @Repository
-public interface PersonRepository extends JpaRepository<Person, Long>{
+public interface PersonRepository extends JpaRepository<Person, Long> {
 
-    Optional<Person> findByUsername(String lowerCase);
+    Optional<Person> findByUsername(String username);
 
     @Query(value = "SELECT new com.example.onlineticketing.dto.person.UserInformation(" +
             "   p.id, p.firstName, p.lastName, p.phoneNumber, p.email, p.gender, p.role, p.isActive " +
@@ -21,5 +21,4 @@ public interface PersonRepository extends JpaRepository<Person, Long>{
             " FROM Person p WHERE p.isActive = true and p.isDeleted = false")
     List<UserInformation> getAllUsers();
 
-    
 }

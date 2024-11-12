@@ -4,6 +4,9 @@ public class Routes {
 
     public static final String BASE_URL = "/api/v1";
 
+    // authentication
+    public static final String Auth = BASE_URL + "/auth";
+    public static final String Authenticate = Auth + "/authenticate";
 
     // person
     public static final String PERSON = BASE_URL + "/person";

@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.HashMap;
 import java.util.Map;
 
-
 @ControllerAdvice
 public class CustomExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(PatientsController.class);
+
     @ExceptionHandler(RestException.class)
     public ResponseEntity<Map<String, String>> handelRestException(RestException ex) {
         LOG.info("Rest exception :: {}", String.valueOf(ex));
@@ -32,11 +32,12 @@ public class CustomExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException exception) {
         LOG.info("Method argument not valid exception :: {}", String.valueOf(exception));
-//        List<String> errors = exception.getBindingResult().getFieldErrors().stream()
-//                .map(DefaultMessageSourceResolvable::getDefaultMessage)
-//                .collect(Collectors.toList());
+        // List<String> errors = exception.getBindingResult().getFieldErrors().stream()
+        // .map(DefaultMessageSourceResolvable::getDefaultMessage)
+        // .collect(Collectors.toList());
         Map<String, String> detailErrorMessages = new HashMap<>();
-        exception.getBindingResult().getFieldErrors().forEach(message->detailErrorMessages.put(message.getField(), message.getDefaultMessage()));
+        exception.getBindingResult().getFieldErrors()
+                .forEach(message -> detailErrorMessages.put(message.getField(), message.getDefaultMessage()));
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("message", "Request body not valid.");
         errorResponse.put("code", HttpStatus.BAD_REQUEST.value());
