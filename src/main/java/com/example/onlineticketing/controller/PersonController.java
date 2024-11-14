@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.onlineticketing.constant.routes.Routes;
 import com.example.onlineticketing.dto.person.AddPersonRequest;
-import com.example.onlineticketing.dto.person.AuthenticateRequest;
 import com.example.onlineticketing.dto.person.UpdatePasswordRequest;
 import com.example.onlineticketing.dto.person.UpdatePersonRequest;
 import com.example.onlineticketing.dto.person.UserInformation;
@@ -29,9 +28,7 @@ public class PersonController {
     @GetMapping(Routes.GET_AUTHENTICATED_PERSON)
     public UserInformation getUserInformation(Principal principal) {
         log.info("Get user information {}", principal.getName());
-        // return principal;
-        // return personService.getAuthenticatedUser(principal);
-        return null;
+        return personService.getAuthenticatedUser(principal);
     }
 
     @GetMapping(Routes.GET_ALL_PERSON)
@@ -53,7 +50,7 @@ public class PersonController {
     }
 
     @PutMapping(Routes.UPDATE_PERSON)
-    public MessageResponse updatePerson(@Valid @RequestBody UpdatePersonRequest request, @PathVariable String userId) {
+    public MessageResponse updatePerson(@Valid @RequestBody UpdatePersonRequest request, @PathVariable Long userId) {
         log.info("Update person request {} {}", request, userId);
         return personService.updatePerson(request, userId);
     }
@@ -65,9 +62,9 @@ public class PersonController {
     }
 
     @GetMapping(Routes.GET_PERSON_BY_ID)
-    public UserInformationResponse getPersonById(@PathVariable String userId, String from, String to, String testData) {
-        log.info("Get person detail by id {} {} {} {}", userId, from, to, testData);
-        return personService.getPersonDetail(userId, from, to, testData);
+    public UserInformation getPersonById(@PathVariable Long userId) {
+        log.info("Get person detail by id {}", userId);
+        return personService.getPersonDetail(userId);
     }
 
     @PostMapping(Routes.CHANGE_PASSWORD)

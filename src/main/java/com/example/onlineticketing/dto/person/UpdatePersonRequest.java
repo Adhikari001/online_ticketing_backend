@@ -35,9 +35,6 @@ public class UpdatePersonRequest {
     @NotNull(message = "is active can not be null")
     private Boolean isActive;
 
-    private int commissionPercentage;
-
-//    @NotNull(message = "commission type can not be null")
-    private String commissionType;
-
+    @NotNull(message = "is active can not be null")
+    private Boolean isDoctor;
 }

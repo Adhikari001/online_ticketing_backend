@@ -15,7 +15,6 @@ import com.example.onlineticketing.dto.person.UserInformationResponse;
 import com.example.onlineticketing.dto.util.MessageResponse;
 import com.example.onlineticketing.dto.util.ValueLabelDropdown;
 
-
 public interface PersonService {
 
     UserDetails getUserDetails(String username);
@@ -30,9 +29,9 @@ public interface PersonService {
 
     MessageResponse addPerson(AddPersonRequest request);
 
-    MessageResponse updatePerson(UpdatePersonRequest request, String userId);
+    MessageResponse updatePerson(UpdatePersonRequest request, Long userId);
 
-    UserInformationResponse getPersonDetail(String userId, String from, String to, String testData);
+    UserInformation getPersonDetail(Long userId);
 
     MessageResponse changePassword(UpdatePasswordRequest request);
 

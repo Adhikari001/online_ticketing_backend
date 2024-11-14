@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @NoArgsConstructor
 @Builder
@@ -24,13 +22,13 @@ public class UserInformation {
     private boolean isActive;
 
     public UserInformation(Long id,
-                           String firstName,
-                           String lastName,
-                           String phoneNumber,
-                           String email,
-                           String gender,
-                           Role role,
-                           boolean isActive) {
+            String firstName,
+            String lastName,
+            String phoneNumber,
+            String email,
+            String gender,
+            Role role,
+            boolean isActive) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -42,13 +40,13 @@ public class UserInformation {
     }
 
     public UserInformation(Long id,
-                           String firstName,
-                           String lastName,
-                           String phoneNumber,
-                           String email,
-                           String gender,
-                           RoleResponse role,
-                           boolean isActive) {
+            String firstName,
+            String lastName,
+            String phoneNumber,
+            String email,
+            String gender,
+            RoleResponse role,
+            boolean isActive) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

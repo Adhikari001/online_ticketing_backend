@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.onlineticketing.comms.exceptionhandler.RestException;
+import com.example.onlineticketing.comms.helper.HelperUtil;
+import com.example.onlineticketing.constant.enums.Gender;
 import com.example.onlineticketing.dto.person.AddPersonRequest;
 import com.example.onlineticketing.dto.person.AuthenticateRequest;
 import com.example.onlineticketing.dto.person.AuthenticationResponse;
@@ -26,6 +28,7 @@ import com.example.onlineticketing.dto.util.ValueLabelDropdown;
 import com.example.onlineticketing.entity.person.Person;
 import com.example.onlineticketing.repository.PersonRepository;
 import com.example.onlineticketing.service.jwt.TokenService;
+import com.example.onlineticketing.service.role.RoleValidator;
 
 @Service
 public class PersonServiceImpl implements PersonService {
@@ -33,13 +36,18 @@ public class PersonServiceImpl implements PersonService {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
+    private final RoleValidator roleValidator;
+    private final PersonValidator personValidator;
 
     public PersonServiceImpl(PersonRepository personRepository, AuthenticationManager authenticationManager,
-            TokenService tokenService, PasswordEncoder passwordEncoder) {
+            TokenService tokenService, PasswordEncoder passwordEncoder, RoleValidator roleValidator,
+            PersonValidator personValidator) {
         this.personRepository = personRepository;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
         this.passwordEncoder = passwordEncoder;
+        this.roleValidator = roleValidator;
+        this.personValidator = personValidator;
     }
 
     @Override
@@ -70,44 +78,92 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public UserInformation getAuthenticatedUser(Principal principal) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAuthenticatedUser'");
+        if (principal == null) {
+            throw new RestException("PS001", "Can not find user from the given username.");
+        }
+        Person person = personRepository.findByUsername(principal.getName())
+                .orElseThrow(() -> new RestException("PS002", "Can not find user from the given username"));
+        return UserHelper.getUserInformation(person);
     }
 
     @Override
     public List<UserInformation> getAllPerson() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllPerson'");
+        return personRepository.getAllUsers();
     }
 
     @Override
     public List<ValueLabelDropdown> getDoctorDropdown() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getDoctorDropdown'");
+        return personRepository.findAllDoctorDropdown();
     }
 
     @Override
     public MessageResponse addPerson(AddPersonRequest request) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addPerson'");
+        validateEmailNotUsed(request.getEmail());
+        Person person = prepareToAddUpdatePerson(new Person(), request);
+        person.setHashedPassword(passwordEncoder.encode(request.getPassword()));
+        personRepository.save(person);
+        return new MessageResponse("Person added successfully.");
     }
 
     @Override
-    public MessageResponse updatePerson(UpdatePersonRequest request, String userId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updatePerson'");
+    public MessageResponse updatePerson(UpdatePersonRequest request, Long userId) {
+        Person person = personValidator.validatePerson(userId);
+        personRepository.save(prepareToAddUpdatePerson(person, request));
+        return new MessageResponse("Person updated successfully.");
     }
 
     @Override
-    public UserInformationResponse getPersonDetail(String userId, String from, String to, String testData) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPersonDetail'");
+    public UserInformation getPersonDetail(Long userId) {
+        Person person = personValidator.validatePerson(userId);
+        return UserHelper.getUserInformation(person);
     }
 
     @Override
     public MessageResponse changePassword(UpdatePasswordRequest request) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'changePassword'");
+        Person person = personValidator.getLoggedInPerson();
+        if (!passwordEncoder.matches(request.getOldPassword(), person.getHashedPassword())) {
+            throw new RestException("PS005", "Old password is incorrect");
+        }
+        person.setHashedPassword(passwordEncoder.encode(request.getNewPassword()));
+        personRepository.save(person);
+        return new MessageResponse("Password changed successfully.");
+    }
+
+    private void validateEmailNotUsed(String email) {
+        Optional<Person> person = personRepository.findByUsername(email.toLowerCase());
+        if (person.isPresent()) {
+            throw new RestException("PS003", "Person with this email already exists");
+        }
+    }
+
+    private Person prepareToAddUpdatePerson(Person person, UpdatePersonRequest request) {
+        if (person.getId() == null) {
+            // add case
+            person.setJoinedDate(HelperUtil.getLocalDateTimeOfUTC());
+            person.setEmail(request.getEmail().toLowerCase());
+            person.setUsername(request.getEmail().toLowerCase());
+        } else {
+            // update case
+            person.setUpdatedDate(HelperUtil.getLocalDateTimeOfUTC());
+        }
+        person.setFirstName(request.getFirstName());
+        person.setLastName(request.getLastName());
+        person.setPhoneNumber(request.getPhoneNumber());
+        // male , female, others
+        person.setGender(validateGender(request.getGender()).name());
+        person.setDoctor(request.getIsDoctor());
+        person.setDeleted(false);
+        person.setRole(roleValidator.validateRole(request.getRoleId()));
+        person.setActive(request.getIsActive());
+        return person;
+    }
+
+    private Gender validateGender(String gender) {
+        for (Gender genderEnum : Gender.values()) {
+            if (genderEnum.name().equalsIgnoreCase(gender))
+                return genderEnum;
+        }
+        throw new RestException("PS004", "Gender can be MALE, FEMALE, OTHERS");
     }
 
 }

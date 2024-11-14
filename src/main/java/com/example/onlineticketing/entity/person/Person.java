@@ -34,12 +34,14 @@ public class Person {
     @Column(name = "hashed_password")
     private String hashedPassword;
 
-
     @Column(name = "gender")
     private String gender;
 
     @Column(name = "joined_date")
     private LocalDateTime joinedDate;
+
+    @Column(name = "updated_date")
+    private LocalDateTime updatedDate;
 
     @Column(name = "is_active")
     private boolean isActive;
@@ -47,6 +49,8 @@ public class Person {
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
+    @Column(name = "is_doctor")
+    private boolean isDoctor;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role", referencedColumnName = "id", nullable = false)

@@ -16,9 +16,9 @@ public class ValueLabelDropdown {
         this.label = label;
     }
 
-    public ValueLabelDropdown(UUID id , String firstName, String lastName) {
+    public ValueLabelDropdown(Long id, String firstName, String lastName) {
         this.value = String.valueOf(id);
-        this.label = (firstName!=null? firstName: "" )+ " " + (lastName!=null? lastName: "");
+        this.label = (firstName != null ? firstName : "") + " " + (lastName != null ? lastName : "");
     }
 
     public ValueLabelDropdown(String value, String label) {

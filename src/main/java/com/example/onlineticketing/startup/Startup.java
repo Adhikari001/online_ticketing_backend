@@ -37,6 +37,7 @@ public class Startup {
 
         Person person = new Person("Saurav", "Adhikari", "sauravadhikari001@gmail.com", "sauravadhikari001@gmail.com",
                 hashedPassword, role);
+        person.setDoctor(true);
         personRepository.save(person);
     }
 

@@ -20,4 +20,8 @@ public class Routes {
     public static final String PERSON_LOGOUT = PERSON + "/logout";
     public static final String CHANGE_PASSWORD = PERSON + "/change-password";
 
+    // patient
+    public static final String PATIENT = BASE_URL + "/patient";
+    public static final String PATIENT_ADD_VISIT_REQUEST = PATIENT + "/add-visit-request";
+    public static final String PATIENT_GET_ALL_REQUEST = PATIENT + "/all-request";
 }

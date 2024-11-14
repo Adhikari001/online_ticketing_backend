@@ -1,6 +1,5 @@
 package com.example.onlineticketing.comms.helper;
 
-
 import com.example.onlineticketing.comms.exceptionhandler.RestException;
 import com.example.onlineticketing.entity.EntityBaseClass;
 import com.example.onlineticketing.entity.person.Person;
@@ -18,7 +17,8 @@ import java.util.Random;
 @Slf4j
 public class HelperUtil {
     public static LocalDate toLocalDate(String date) {
-        if (date == null || date.isEmpty()) return null;
+        if (date == null || date.isEmpty())
+            return null;
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try {
             return LocalDate.parse(date, dateTimeFormatter);
@@ -41,8 +41,8 @@ public class HelperUtil {
     }
 
     public static LocalDateTime getLocalDateTimeOfUTC() {
-        return LocalDateTime.now();
-//        return ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime();
+        // return LocalDateTime.now();
+        return ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime();
     }
 
     public static LocalDate getLocalDateOfUTC() {
@@ -60,8 +60,7 @@ public class HelperUtil {
                 .toString();
     }
 
-
-    //2000 =  rs 20.00
+    // 2000 = rs 20.00
     public static String formatNepaliCurrency(String amount) {
         boolean addMinus = amount.startsWith("-");
         if (addMinus) {
@@ -74,11 +73,13 @@ public class HelperUtil {
         } else if (amount.length() == 2) {
             amount = "0".concat(amount);
         }
-        return "Rs ".concat(addMinus ? "-" : "").concat(amount.substring(0, amount.length() - 2)).concat(".").concat(amount.substring(amount.length() - 2));
+        return "Rs ".concat(addMinus ? "-" : "").concat(amount.substring(0, amount.length() - 2)).concat(".")
+                .concat(amount.substring(amount.length() - 2));
     }
 
     public static String formatNepaliCurrency(Long amount) {
-        if (amount == null) return formatNepaliCurrency(String.valueOf(0));
+        if (amount == null)
+            return formatNepaliCurrency(String.valueOf(0));
         return formatNepaliCurrency(String.valueOf(amount));
     }
 
@@ -94,7 +95,7 @@ public class HelperUtil {
                 "       case when doc != null then doc.id else null end, " +
                 "       case when doc != null then doc.firstName else null end, " +
                 "       case when doc != null then doc.lastName else null end, " +
-                "       v.appointment.id)"+
+                "       v.appointment.id)" +
                 "   from Visit v " +
                 "   left join Doctor doc on v.assignedDoctor = doc" +
                 "   where v.visitDateTime >= :from and v.visitDateTime< :to " +
@@ -109,18 +110,22 @@ public class HelperUtil {
     }
 
     public static String stringFromArrayOfNumbers(List<String> listOfString) {
-        if (listOfString == null || listOfString.isEmpty()) return "";
+        if (listOfString == null || listOfString.isEmpty())
+            return "";
         List<String> strinngList = listOfString.stream().filter(s -> s.matches("^[0-9]+")).toList();
         return String.join(",", strinngList);
     }
 
     public static Long[] stringToArrayOfNumbers(String listOfString) {
-        if (listOfString == null || listOfString.isEmpty()) return new Long[0];
-        return Arrays.stream(listOfString.split(",")).filter(s -> s.matches("^[0-9]+")).map(s->Long.valueOf(s)).toArray(Long[]::new);
+        if (listOfString == null || listOfString.isEmpty())
+            return new Long[0];
+        return Arrays.stream(listOfString.split(",")).filter(s -> s.matches("^[0-9]+")).map(s -> Long.valueOf(s))
+                .toArray(Long[]::new);
     }
 
     public static boolean isSameDay(LocalDateTime dateOne, LocalDateTime dateTwo) {
-        if(dateOne == null || dateTwo == null) return dateOne==null && dateTwo==null;
+        if (dateOne == null || dateTwo == null)
+            return dateOne == null && dateTwo == null;
         return dateOne.toLocalDate().equals(dateTwo.toLocalDate());
     }
 
