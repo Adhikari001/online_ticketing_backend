@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.onlineticketing.comms.exceptionhandler.RestException;
+import com.example.onlineticketing.comms.helper.EnumHelperUtil;
 import com.example.onlineticketing.comms.helper.HelperUtil;
 import com.example.onlineticketing.constant.enums.Gender;
 import com.example.onlineticketing.dto.person.AddPersonRequest;
@@ -22,7 +23,6 @@ import com.example.onlineticketing.dto.person.AuthenticationResponse;
 import com.example.onlineticketing.dto.person.UpdatePasswordRequest;
 import com.example.onlineticketing.dto.person.UpdatePersonRequest;
 import com.example.onlineticketing.dto.person.UserInformation;
-import com.example.onlineticketing.dto.person.UserInformationResponse;
 import com.example.onlineticketing.dto.util.MessageResponse;
 import com.example.onlineticketing.dto.util.ValueLabelDropdown;
 import com.example.onlineticketing.entity.person.Person;
@@ -150,20 +150,12 @@ public class PersonServiceImpl implements PersonService {
         person.setLastName(request.getLastName());
         person.setPhoneNumber(request.getPhoneNumber());
         // male , female, others
-        person.setGender(validateGender(request.getGender()).name());
+        person.setGender(EnumHelperUtil.validateGender(request.getGender()).name());
         person.setDoctor(request.getIsDoctor());
         person.setDeleted(false);
         person.setRole(roleValidator.validateRole(request.getRoleId()));
         person.setActive(request.getIsActive());
         return person;
-    }
-
-    private Gender validateGender(String gender) {
-        for (Gender genderEnum : Gender.values()) {
-            if (genderEnum.name().equalsIgnoreCase(gender))
-                return genderEnum;
-        }
-        throw new RestException("PS004", "Gender can be MALE, FEMALE, OTHERS");
     }
 
 }

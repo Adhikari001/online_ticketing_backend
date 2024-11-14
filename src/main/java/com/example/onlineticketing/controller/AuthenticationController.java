@@ -23,7 +23,7 @@ public class AuthenticationController {
     private static final Logger LOG = LoggerFactory.getLogger(AuthenticationController.class);
     private final PersonService personService;
 
-    @PostMapping(Routes.Authenticate)
+    @PostMapping(Routes.AUTHENTICATE)
     public AuthenticationResponse postMethodName(@Valid @RequestBody AuthenticateRequest request) {
         LOG.info("authenticate user {}", request);
         return personService.authenticateUser(request);

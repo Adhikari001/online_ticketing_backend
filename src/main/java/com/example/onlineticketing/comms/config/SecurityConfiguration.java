@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/add-test-data").authenticated()
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
+                        .requestMatchers("/api/v1/patient/add-visit-request").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/patients/")
                         .hasAuthority("SCOPE_" + GrantedAuthoritiesEnum.MANAGE_PATIENT.name())
                         .requestMatchers("/api/v1/auth/**").permitAll()

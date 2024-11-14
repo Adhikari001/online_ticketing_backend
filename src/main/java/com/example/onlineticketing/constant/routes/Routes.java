@@ -5,8 +5,8 @@ public class Routes {
     public static final String BASE_URL = "/api/v1";
 
     // authentication
-    public static final String Auth = BASE_URL + "/auth";
-    public static final String Authenticate = Auth + "/authenticate";
+    public static final String AUTH = BASE_URL + "/auth";
+    public static final String AUTHENTICATE = AUTH + "/authenticate";
 
     // person
     public static final String PERSON = BASE_URL + "/person";
@@ -24,4 +24,8 @@ public class Routes {
     public static final String PATIENT = BASE_URL + "/patient";
     public static final String PATIENT_ADD_VISIT_REQUEST = PATIENT + "/add-visit-request";
     public static final String PATIENT_GET_ALL_REQUEST = PATIENT + "/all-request";
+
+    // role
+    public static final String ROLE = BASE_URL + "/role";
+    public static final String ROLE_GET_ALL = ROLE + "/get-all";
 }

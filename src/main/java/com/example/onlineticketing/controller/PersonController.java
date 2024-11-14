@@ -11,7 +11,6 @@ import com.example.onlineticketing.dto.person.AddPersonRequest;
 import com.example.onlineticketing.dto.person.UpdatePasswordRequest;
 import com.example.onlineticketing.dto.person.UpdatePersonRequest;
 import com.example.onlineticketing.dto.person.UserInformation;
-import com.example.onlineticketing.dto.person.UserInformationResponse;
 import com.example.onlineticketing.dto.util.MessageResponse;
 import com.example.onlineticketing.dto.util.ValueLabelDropdown;
 import com.example.onlineticketing.service.person.PersonService;
